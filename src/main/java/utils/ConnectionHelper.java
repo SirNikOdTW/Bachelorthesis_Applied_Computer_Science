@@ -64,7 +64,6 @@ public class ConnectionHelper
                     SQLState: %s;
                     VendorError:%s""",
                     e.getMessage(), e.getSQLState(), e.getErrorCode()));
-            e.printStackTrace();
         }
 
         return connection;

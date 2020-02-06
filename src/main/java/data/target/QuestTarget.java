@@ -2,14 +2,17 @@ package data.target;
 
 import data.TargetDataset;
 
+import java.sql.Clob;
+import java.sql.SQLException;
+
 public class QuestTarget implements TargetDataset
 {
     private int questId;
     private String name;
     private String involvedCharacters;
-    private String dialogue;
+    private Clob dialogue;
 
-    public QuestTarget(int questId, String name, String involvedCharacters, String dialogue)
+    public QuestTarget(int questId, String name, String involvedCharacters, Clob dialogue)
     {
         this.questId = questId;
         this.name = name;
@@ -32,7 +35,7 @@ public class QuestTarget implements TargetDataset
         return involvedCharacters;
     }
 
-    public String getDialogue()
+    public Clob getDialogue()
     {
         return dialogue;
     }
@@ -40,6 +43,15 @@ public class QuestTarget implements TargetDataset
     @Override
     public String toString()
     {
-        return String.format("Quest [ %d, %s, %s, %s... ]", this.questId, this.name, this.involvedCharacters, this.dialogue.substring(0, 10));
+        try
+        {
+            return String.format("Quest [ %d, %s, { %s }, %s... ]", this.questId, this.name, this.involvedCharacters, this.dialogue.getSubString(1, 10));
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

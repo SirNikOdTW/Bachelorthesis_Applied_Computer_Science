@@ -1,5 +1,6 @@
 package migration;
 
+import com.mysql.cj.exceptions.NumberOutOfRange;
 import data.source.AbilitiesSource;
 import data.source.PersonSource;
 import data.target.AbilityTarget;
@@ -48,13 +49,18 @@ public class AbilityMigration extends ETL<AbilitiesSource, AbilityTarget>
     @Override
     protected List<AbilityTarget> transform(List<AbilitiesSource> extractedData)
     {
-        DataTransformer<AbilitiesSource, AbilityTarget> transformer =
-                (dataset) -> new AbilityTarget(
-                        abilityId++,
-                        dataset.getName(),
-                        dataset.getDescription(),
-                        dataset.getLevel()
-                );
+        DataTransformer<AbilitiesSource, AbilityTarget> transformer = (dataset) -> {
+            if (dataset.getLevel() < 0 || dataset.getLevel() > 100)
+                log.error("level-value out of range",
+                        new NumberOutOfRange("level must be within 0 an 100 (both inclusive)"));
+            var levelCorrection = 100f;
+            return new AbilityTarget(
+                    abilityId++,
+                    dataset.getName(),
+                    dataset.getDescription(),
+                    dataset.getLevel() / levelCorrection
+            );
+        };
 
         return new Transformer<>(transformer, extractedData).doTransform();
     }
@@ -66,7 +72,7 @@ public class AbilityMigration extends ETL<AbilitiesSource, AbilityTarget>
             preparedStatement.setInt(1, data.getAbilityId());
             preparedStatement.setString(2, data.getAbilityName());
             preparedStatement.setString(3, data.getAbilityDescription());
-            preparedStatement.setInt(4, data.getAbilityLevel());
+            preparedStatement.setFloat(4, data.getAbilityLevel());
         };
 
         var sql = "insert into ability values (?, ?, ?, ?)";

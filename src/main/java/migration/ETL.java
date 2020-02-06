@@ -6,6 +6,7 @@ import data.source.PersonSource;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 public abstract class ETL<T extends SourceDataset, E extends TargetDataset>
@@ -27,6 +28,15 @@ public abstract class ETL<T extends SourceDataset, E extends TargetDataset>
         var extractedData = this.extract();
         var transformedData = this.transform(extractedData);
         this.load(transformedData);
+
+        try
+        {
+            this.target.commit();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     protected abstract List<T> extract();

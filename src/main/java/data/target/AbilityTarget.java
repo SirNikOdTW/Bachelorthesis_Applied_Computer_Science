@@ -7,9 +7,9 @@ public class AbilityTarget implements TargetDataset
     private int abilityId;
     private String abilityName;
     private String abilityDescription;
-    private int abilityLevel;
+    private float abilityLevel;
 
-    public AbilityTarget(int abilityId, String abilityName, String abilityDescription, int abilityLevel)
+    public AbilityTarget(int abilityId, String abilityName, String abilityDescription, float abilityLevel)
     {
         this.abilityId = abilityId;
         this.abilityName = abilityName;
@@ -32,7 +32,7 @@ public class AbilityTarget implements TargetDataset
         return abilityDescription;
     }
 
-    public int getAbilityLevel()
+    public float getAbilityLevel()
     {
         return abilityLevel;
     }
@@ -40,7 +40,7 @@ public class AbilityTarget implements TargetDataset
     @Override
     public String toString()
     {
-        return String.format("Ability [ %d, %s, %s, %d ]", this.abilityId, this.abilityName, this.abilityDescription, this.abilityLevel);
+        return String.format("Ability [ %d, %s, %s, %f ]", this.abilityId, this.abilityName, this.abilityDescription, this.abilityLevel);
     }
 
 }

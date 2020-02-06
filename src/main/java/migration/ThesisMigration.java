@@ -32,11 +32,24 @@ public class ThesisMigration
         final var postgresInfo = new DatabaseInformation("localhost", "targetdb", "test", "test", 25001);
         this.postgresql= new ConnectionHelper(DatabaseType.POSTGRESQL, postgresInfo).createConnection();
 
+        try
+        {
+            this.mariadb.setAutoCommit(false);
+            this.mysql.setAutoCommit(false);
+            this.postgresql.setAutoCommit(false);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+
         this.migrations = new ArrayList<>();
         this.migrations.add(new PlayerMigration(null, this.postgresql));
         this.migrations.add(new AbilityMigration(this.mysql, this.postgresql));
         this.migrations.add(new PlayerAbilitiesMigration(this.postgresql, this.postgresql));
         this.migrations.add(new CharacterMigration(this.mariadb, this.postgresql));
+        this.migrations.add(new GameobjectMigration(this.mariadb, this.postgresql));
+        this.migrations.add(new QuestMigration(this.mariadb, this.postgresql));
     }
 
     public void executeMigrations()
