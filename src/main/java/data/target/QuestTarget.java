@@ -7,12 +7,12 @@ import java.sql.SQLException;
 
 public class QuestTarget implements TargetDataset
 {
-    private int questId;
-    private String name;
-    private String involvedCharacters;
-    private Clob dialogue;
+    private final int questId;
+    private final String name;
+    private final String involvedCharacters;
+    private final Clob dialogue;
 
-    public QuestTarget(int questId, String name, String involvedCharacters, Clob dialogue)
+    public QuestTarget(final int questId, final String name, final String involvedCharacters, final Clob dialogue)
     {
         this.questId = questId;
         this.name = name;
@@ -47,7 +47,7 @@ public class QuestTarget implements TargetDataset
         {
             return String.format("Quest [ %d, %s, { %s }, %s... ]", this.questId, this.name, this.involvedCharacters, this.dialogue.getSubString(1, 10));
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             e.printStackTrace();
         }

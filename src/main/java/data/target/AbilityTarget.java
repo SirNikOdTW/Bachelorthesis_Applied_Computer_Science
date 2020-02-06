@@ -4,12 +4,12 @@ import data.TargetDataset;
 
 public class AbilityTarget implements TargetDataset
 {
-    private int abilityId;
-    private String abilityName;
-    private String abilityDescription;
-    private float abilityLevel;
+    private final int abilityId;
+    private final String abilityName;
+    private final String abilityDescription;
+    private final float abilityLevel;
 
-    public AbilityTarget(int abilityId, String abilityName, String abilityDescription, float abilityLevel)
+    public AbilityTarget(final int abilityId, final String abilityName, final String abilityDescription, final float abilityLevel)
     {
         this.abilityId = abilityId;
         this.abilityName = abilityName;

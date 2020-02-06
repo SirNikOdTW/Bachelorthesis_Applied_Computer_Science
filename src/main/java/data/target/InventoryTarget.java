@@ -4,11 +4,11 @@ import data.TargetDataset;
 
 public class InventoryTarget implements TargetDataset
 {
-    private int playerId;
-    private int objectId;
-    private boolean stolen;
+    private final int playerId;
+    private final int objectId;
+    private final boolean stolen;
 
-    public InventoryTarget(int playerId, int objectId, boolean stolen)
+    public InventoryTarget(final int playerId, final int objectId, final boolean stolen)
     {
         this.playerId = playerId;
         this.objectId = objectId;

@@ -4,10 +4,10 @@ import data.SourceDataset;
 
 public class RelationshipsSource implements SourceDataset
 {
-    private int personId;
-    private int relationshipLevel;
+    private final int personId;
+    private final int relationshipLevel;
 
-    public RelationshipsSource(int personId, int relationshipLevel)
+    public RelationshipsSource(final int personId, final int relationshipLevel)
     {
         this.personId = personId;
         this.relationshipLevel = relationshipLevel;

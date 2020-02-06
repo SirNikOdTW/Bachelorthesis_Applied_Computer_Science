@@ -4,11 +4,11 @@ import data.SourceDataset;
 
 public class GameobjectSource implements SourceDataset
 {
-    private int objectId;
-    private String name;
-    private String description;
+    private final int objectId;
+    private final String name;
+    private final String description;
 
-    public GameobjectSource(int objectId, String name, String description)
+    public GameobjectSource(final int objectId, final String name, final String description)
     {
         this.objectId = objectId;
         this.name = name;

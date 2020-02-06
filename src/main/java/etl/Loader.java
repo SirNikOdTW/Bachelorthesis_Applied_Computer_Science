@@ -1,6 +1,5 @@
 package etl;
 
-import data.SourceDataset;
 import data.TargetDataset;
 import org.apache.log4j.Logger;
 import utils.StatementPreparerLoader;
@@ -11,15 +10,15 @@ import java.util.List;
 
 public class Loader<T extends TargetDataset>
 {
-    private static Logger log = Logger.getLogger(Loader.class.getName());
+    private static final Logger log = Logger.getLogger(Loader.class.getName());
 
-    private Connection targetDatabase;
-    private StatementPreparerLoader<T> statementPreparerLoader;
-    private List<T> transformedData;
-    private String sql;
+    private final Connection targetDatabase;
+    private final StatementPreparerLoader<T> statementPreparerLoader;
+    private final List<T> transformedData;
+    private final String sql;
 
-    public Loader(Connection targetDatabase, StatementPreparerLoader<T> statementPreparerLoader, List<T> transformedData,
-                  String sql)
+    public Loader(final Connection targetDatabase, final StatementPreparerLoader<T> statementPreparerLoader, final List<T> transformedData,
+                  final String sql)
     {
         this.targetDatabase = targetDatabase;
         this.statementPreparerLoader = statementPreparerLoader;
@@ -31,16 +30,16 @@ public class Loader<T extends TargetDataset>
     {
         try
         {
-            for (T transformedDatum : this.transformedData)
+            for (final T transformedDatum : this.transformedData)
             {
                 log.info(String.format("Load data into target: %s", transformedDatum));
-                var preparedStatement = this.targetDatabase.prepareStatement(this.sql);
+                final var preparedStatement = this.targetDatabase.prepareStatement(this.sql);
                 this.statementPreparerLoader.doPrepare(preparedStatement, transformedDatum);
                 preparedStatement.executeUpdate();
             }
             log.info(String.format("--- Data loaded into target with '%s' ---", this.sql));
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             e.printStackTrace();
         }

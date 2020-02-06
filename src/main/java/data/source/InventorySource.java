@@ -4,9 +4,9 @@ import data.SourceDataset;
 
 public class InventorySource implements SourceDataset
 {
-    private int objectId;
+    private final int objectId;
 
-    public InventorySource(int objectId)
+    public InventorySource(final int objectId)
     {
         this.objectId = objectId;
     }

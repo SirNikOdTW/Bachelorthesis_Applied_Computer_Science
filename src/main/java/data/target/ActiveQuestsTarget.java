@@ -4,11 +4,11 @@ import data.TargetDataset;
 
 public class ActiveQuestsTarget implements TargetDataset
 {
-    private int playerId;
-    private int questId;
-    private int questProgress;
+    private final int playerId;
+    private final int questId;
+    private final int questProgress;
 
-    public ActiveQuestsTarget(int playerId, int questId, int questProgress)
+    public ActiveQuestsTarget(final int playerId, final int questId, final int questProgress)
     {
         this.playerId = playerId;
         this.questId = questId;

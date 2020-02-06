@@ -4,10 +4,10 @@ import data.SourceDataset;
 
 public class PlayerAbilitiesSource implements SourceDataset
 {
-    private int playerId;
-    private int abilityId;
+    private final int playerId;
+    private final int abilityId;
 
-    public PlayerAbilitiesSource(int playerId, int abilityId)
+    public PlayerAbilitiesSource(final int playerId, final int abilityId)
     {
         this.playerId = playerId;
         this.abilityId = abilityId;

@@ -4,10 +4,10 @@ import data.SourceDataset;
 
 public class ActiveQuestsSource implements SourceDataset
 {
-    private int questId;
-    private int progress;
+    private final int questId;
+    private final int progress;
 
-    public ActiveQuestsSource(int questId, int progress)
+    public ActiveQuestsSource(final int questId, final int progress)
     {
         this.questId = questId;
         this.progress = progress;

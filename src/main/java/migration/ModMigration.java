@@ -1,8 +1,6 @@
 package migration;
 
-import data.source.GameobjectSource;
 import data.source.ModSource;
-import data.target.GameobjectTarget;
 import data.target.ModTarget;
 import etl.Extractor;
 import etl.Loader;
@@ -19,7 +17,7 @@ import java.util.List;
 
 public class ModMigration extends ETL<ModSource, ModTarget>
 {
-    public ModMigration(Connection source, Connection target)
+    public ModMigration(final Connection source, final Connection target)
     {
         super(source, target);
     }
@@ -27,8 +25,8 @@ public class ModMigration extends ETL<ModSource, ModTarget>
     @Override
     protected List<ModSource> extract()
     {
-        DataStorer<ModSource> dataStorer = (resultSet) -> {
-            var extractedData = new ArrayList<ModSource>();
+        final DataStorer<ModSource> dataStorer = (resultSet) -> {
+            final var extractedData = new ArrayList<ModSource>();
             while (resultSet.next())
             {
                 extractedData.add(new ModSource(
@@ -41,16 +39,16 @@ public class ModMigration extends ETL<ModSource, ModTarget>
             return extractedData;
         };
 
-        var sql = "select * from `mod`;";
-        StatementPreparerExtractor statementPreparer = (preparedStatement) -> {};
+        final var sql = "select * from `mod`;";
+        final StatementPreparerExtractor statementPreparer = (preparedStatement) -> {};
 
         return new Extractor<>(super.source, dataStorer, statementPreparer, sql).doExtract();
     }
 
     @Override
-    protected List<ModTarget> transform(List<ModSource> extractedData)
+    protected List<ModTarget> transform(final List<ModSource> extractedData)
     {
-        DataTransformer<ModSource, ModTarget> transformer = (dataset) -> new ModTarget(
+        final DataTransformer<ModSource, ModTarget> transformer = (dataset) -> new ModTarget(
                 dataset.getModId(),
                 dataset.getName(),
                 dataset.getInstallationDate(),
@@ -61,16 +59,16 @@ public class ModMigration extends ETL<ModSource, ModTarget>
     }
 
     @Override
-    protected void load(List<ModTarget> transformedData)
+    protected void load(final List<ModTarget> transformedData)
     {
-        StatementPreparerLoader<ModTarget> statementPreparerLoader =  (preparedStatement, data) -> {
+        final StatementPreparerLoader<ModTarget> statementPreparerLoader =  (preparedStatement, data) -> {
             preparedStatement.setInt(1, data.getModId());
             preparedStatement.setString(2, data.getName());
             preparedStatement.setDate(3, Date.valueOf(data.getModInstallationDate()));
             preparedStatement.setBinaryStream(4, data.getModBinary().getBinaryStream());
         };
 
-        var sql = "insert into \"mod\" values (?, ?, ?, ?)";
+        final var sql = "insert into \"mod\" values (?, ?, ?, ?)";
 
         new Loader<>(super.target, statementPreparerLoader, transformedData, sql).doLoad();
     }

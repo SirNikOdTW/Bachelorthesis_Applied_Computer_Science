@@ -4,10 +4,10 @@ import data.TargetDataset;
 
 public class CharacterInventoryTarget implements TargetDataset
 {
-    private int personId;
-    private int objectId;
+    private final int personId;
+    private final int objectId;
 
-    public CharacterInventoryTarget(int personId, int objectId)
+    public CharacterInventoryTarget(final int personId, final int objectId)
     {
         this.personId = personId;
         this.objectId = objectId;

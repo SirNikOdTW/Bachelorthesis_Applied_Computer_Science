@@ -2,7 +2,6 @@ package migration;
 
 import data.SourceDataset;
 import data.TargetDataset;
-import data.source.PersonSource;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
@@ -11,12 +10,12 @@ import java.util.List;
 
 public abstract class ETL<T extends SourceDataset, E extends TargetDataset>
 {
-    protected static Logger log = Logger.getLogger(ETL.class.getName());
+    protected static final Logger log = Logger.getLogger(ETL.class.getName());
 
-    protected Connection source;
-    protected Connection target;
+    protected final Connection source;
+    protected final Connection target;
 
-    public ETL(Connection source, Connection target)
+    public ETL(final Connection source, final Connection target)
     {
         this.source = source;
         this.target = target;
@@ -25,15 +24,15 @@ public abstract class ETL<T extends SourceDataset, E extends TargetDataset>
     public void migrate()
     {
         log.info(String.format("--- Migration: %s ---", this.getClass().getName()));
-        var extractedData = this.extract();
-        var transformedData = this.transform(extractedData);
+        final var extractedData = this.extract();
+        final var transformedData = this.transform(extractedData);
         this.load(transformedData);
 
         try
         {
             this.target.commit();
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             e.printStackTrace();
         }

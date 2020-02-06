@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class QuestMigration extends ETL<QuestSource, QuestTarget>
 {
-    public QuestMigration(Connection source, Connection target)
+    public QuestMigration(final Connection source, final Connection target)
     {
         super(source, target);
     }
@@ -26,8 +26,8 @@ public class QuestMigration extends ETL<QuestSource, QuestTarget>
     @Override
     protected List<QuestSource> extract()
     {
-        DataStorer<QuestSource> dataStorer = (resultSet) -> {
-            var extractedData = new ArrayList<QuestSource>();
+        final DataStorer<QuestSource> dataStorer = (resultSet) -> {
+            final var extractedData = new ArrayList<QuestSource>();
             while (resultSet.next())
             {
                 extractedData.add(new QuestSource(
@@ -39,8 +39,8 @@ public class QuestMigration extends ETL<QuestSource, QuestTarget>
             return extractedData;
         };
 
-        var sql = "select * from quest q join questParticipation qp on q.questId  = qp.questId;";
-        StatementPreparerExtractor statementPreparer = (preparedStatement) -> {};
+        final var sql = "select * from quest q join questParticipation qp on q.questId  = qp.questId;";
+        final StatementPreparerExtractor statementPreparer = (preparedStatement) -> {};
 
         return new Extractor<>(super.source, dataStorer, statementPreparer, sql).doExtract();
     }
@@ -48,25 +48,25 @@ public class QuestMigration extends ETL<QuestSource, QuestTarget>
     @Override
     protected List<QuestTarget> transform(List<QuestSource> extractedData)
     {
-        var map = new HashMap<Integer, String>();
+        final var map = new HashMap<Integer, String>();
 
-        for (QuestSource extractedDatum : extractedData)
+        for (final QuestSource extractedDatum : extractedData)
         {
-            var key = extractedDatum.getQuestId();
+            final var key = extractedDatum.getQuestId();
             if (!map.containsKey(key))
             {
                 map.put(key, String.valueOf(extractedDatum.getPersonId()));
             }
             else
             {
-                var involvedPersons = String.format("%s, %s", map.get(key), extractedDatum.getPersonId());
+                final var involvedPersons = String.format("%s, %s", map.get(key), extractedDatum.getPersonId());
                 map.replace(key, involvedPersons);
             }
         }
 
         extractedData = extractedData.stream().distinct().collect(Collectors.toList());
 
-        DataTransformer<QuestSource, QuestTarget> transformer = (dataset) -> new QuestTarget(
+        final DataTransformer<QuestSource, QuestTarget> transformer = (dataset) -> new QuestTarget(
                     dataset.getQuestId(),
                     dataset.getName(),
                     map.get(dataset.getQuestId()),
@@ -77,16 +77,16 @@ public class QuestMigration extends ETL<QuestSource, QuestTarget>
     }
 
     @Override
-    protected void load(List<QuestTarget> transformedData)
+    protected void load(final List<QuestTarget> transformedData)
     {
-        StatementPreparerLoader<QuestTarget> statementPreparerLoader =  (preparedStatement, data) -> {
+        final StatementPreparerLoader<QuestTarget> statementPreparerLoader =  (preparedStatement, data) -> {
             preparedStatement.setInt(1, data.getQuestId());
             preparedStatement.setString(2, data.getName());
             preparedStatement.setString(3, data.getInvolvedCharacters());
             preparedStatement.setClob(4, data.getDialogue());
         };
 
-        var sql = "insert into quest values (?, ?, ?, ?)";
+        final var sql = "insert into quest values (?, ?, ?, ?)";
 
         new Loader<>(super.target, statementPreparerLoader, transformedData, sql).doLoad();
     }

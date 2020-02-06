@@ -4,11 +4,11 @@ import data.SourceDataset;
 
 public class AbilitiesSource implements SourceDataset
 {
-    private String name;
-    private String description;
-    private int level;
+    private final String name;
+    private final String description;
+    private final int level;
 
-    public AbilitiesSource(String name, String description, int level)
+    public AbilitiesSource(final String name, final String description, final int level)
     {
         this.name = name;
         this.description = description;

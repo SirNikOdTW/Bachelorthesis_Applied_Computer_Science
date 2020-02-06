@@ -10,15 +10,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("ALL")
 public class ThesisMigration
 {
-    private static Logger log = Logger.getLogger(ThesisMigration.class.getName());
+    private static final Logger log = Logger.getLogger(ThesisMigration.class.getName());
 
-    private List<ETL> migrations;
+    private final List<ETL> migrations;
 
-    private Connection mariadb;
-    private Connection mysql;
-    private Connection postgresql;
+    private final Connection mariadb;
+    private final Connection mysql;
+    private final Connection postgresql;
 
     public ThesisMigration()
     {
@@ -38,7 +39,7 @@ public class ThesisMigration
             this.mysql.setAutoCommit(false);
             this.postgresql.setAutoCommit(false);
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             e.printStackTrace();
         }
@@ -55,17 +56,23 @@ public class ThesisMigration
 
     public void executeMigrations()
     {
-        log.info("\n----- Starting migrations for each migration step -----\n");
+        log.info("""
+
+                ----- Starting migrations for each migration step -----
+                """);
         this.migrations.forEach(ETL::migrate);
 
         try
         {
-            log.info("\n--- Closing connections ---\n");
+            log.info("""
+
+                    --- Closing connections ---
+                    """);
             this.mariadb.close();
             this.mysql.close();
             this.postgresql.close();
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             e.printStackTrace();
         }

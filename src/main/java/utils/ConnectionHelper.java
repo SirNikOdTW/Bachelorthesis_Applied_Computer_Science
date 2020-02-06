@@ -1,6 +1,5 @@
 package utils;
 
-import migration.ThesisMigration;
 import org.apache.log4j.Logger;
 
 import java.net.URI;
@@ -9,7 +8,7 @@ import java.sql.*;
 
 public class ConnectionHelper
 {
-    private static Logger log = Logger.getLogger(ConnectionHelper.class.getName());
+    private static final Logger log = Logger.getLogger(ConnectionHelper.class.getName());
 
     private final DatabaseType databaseType;
     private final String user;

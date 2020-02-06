@@ -4,11 +4,11 @@ import data.SourceDataset;
 
 public class PersonSource implements SourceDataset
 {
-    private int personId;
-    private String name;
-    private boolean mortal;
+    private final int personId;
+    private final String name;
+    private final boolean mortal;
 
-    public PersonSource(int personId, String name, boolean mortal)
+    public PersonSource(final int personId, final String name, final boolean mortal)
     {
         this.personId = personId;
         this.name = name;

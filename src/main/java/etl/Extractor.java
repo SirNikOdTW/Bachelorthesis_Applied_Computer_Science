@@ -11,15 +11,15 @@ import java.util.List;
 
 public class Extractor<T extends SourceDataset>
 {
-    private static Logger log = Logger.getLogger(Extractor.class.getName());
+    private static final Logger log = Logger.getLogger(Extractor.class.getName());
 
-    private Connection sourceDatabase;
-    private DataStorer<T> dataStorer;
-    private StatementPreparerExtractor statementPreparer;
-    private String sql;
+    private final Connection sourceDatabase;
+    private final DataStorer<T> dataStorer;
+    private final StatementPreparerExtractor statementPreparer;
+    private final String sql;
 
-    public Extractor(Connection sourceDatabase, DataStorer<T> dataStorer,
-                     StatementPreparerExtractor statementPreparer, String sql)
+    public Extractor(final Connection sourceDatabase, final DataStorer<T> dataStorer,
+                     final StatementPreparerExtractor statementPreparer, final String sql)
     {
         this.sourceDatabase = sourceDatabase;
         this.dataStorer = dataStorer;
@@ -31,13 +31,13 @@ public class Extractor<T extends SourceDataset>
     {
         try
         {
-            var preparedStatement = this.sourceDatabase.prepareStatement(sql);
+            final var preparedStatement = this.sourceDatabase.prepareStatement(sql);
             this.statementPreparer.doPrepare(preparedStatement);
-            var resultSet = preparedStatement.executeQuery();
+            final var resultSet = preparedStatement.executeQuery();
             log.info(String.format("--- Data extracted with '%s' ---", this.sql));
             return this.dataStorer.doStore(resultSet);
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             e.printStackTrace();
         }

@@ -1,15 +1,14 @@
 package data.target;
 
-import data.SourceDataset;
 import data.TargetDataset;
 
 public class CharacterTarget implements TargetDataset
 {
-    private int personId;
-    private String name;
-    private boolean mortal;
+    private final int personId;
+    private final String name;
+    private final boolean mortal;
 
-    public CharacterTarget(int personId, String name, boolean mortal)
+    public CharacterTarget(final int personId, final String name, final boolean mortal)
     {
         this.personId = personId;
         this.name = name;

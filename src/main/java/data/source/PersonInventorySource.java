@@ -4,10 +4,10 @@ import data.SourceDataset;
 
 public class PersonInventorySource implements SourceDataset
 {
-    private int personId;
-    private int objectId;
+    private final int personId;
+    private final int objectId;
 
-    public PersonInventorySource(int personId, int objectId)
+    public PersonInventorySource(final int personId, final int objectId)
     {
         this.personId = personId;
         this.objectId = objectId;

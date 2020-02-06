@@ -4,10 +4,10 @@ import data.TargetDataset;
 
 public class PlayerTarget implements TargetDataset
 {
-    private int playerId;
-    private String playerName;
+    private final int playerId;
+    private final String playerName;
 
-    public PlayerTarget(int playerId, String playerName)
+    public PlayerTarget(final int playerId, final String playerName)
     {
         this.playerId = playerId;
         this.playerName = playerName;

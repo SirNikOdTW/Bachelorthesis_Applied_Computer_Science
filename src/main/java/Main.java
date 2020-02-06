@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Main
 {
-    private static Logger log = Logger.getLogger(Main.class.getName());
+    private static final Logger log = Logger.getLogger(Main.class.getName());
 
     public static void main(final String[] args)
     {
@@ -23,8 +23,8 @@ public class Main
         final var dbInfo = new DatabaseInformation("localhost", "sourcedb1", "test", "test", 25003);
         final var connection = new ConnectionHelper(DatabaseType.MARIADB, dbInfo).createConnection();
 
-        DataStorer<PersonSource> personSourceDataStorer = (rs) -> {
-            var persons = new ArrayList<PersonSource>();
+        final DataStorer<PersonSource> personSourceDataStorer = (rs) -> {
+            final var persons = new ArrayList<PersonSource>();
             while (rs.next())
             {
                 persons.add(new PersonSource(
@@ -36,17 +36,17 @@ public class Main
             return persons;
         };
 
-        StatementPreparerExtractor statementPreparer = (preparedStatement) -> {
+        final StatementPreparerExtractor statementPreparer = (preparedStatement) -> {
         };
 
-        var sql = "select * from person;";
+        final var sql = "select * from person;";
 
         return new Extractor<>(connection, personSourceDataStorer, statementPreparer, sql).doExtract();
     }
 
-    private static List<CharacterTarget> testTransform(List<PersonSource> persons)
+    private static List<CharacterTarget> testTransform(final List<PersonSource> persons)
     {
-        DataTransformer<PersonSource, CharacterTarget> personTransformer =
+        final DataTransformer<PersonSource, CharacterTarget> personTransformer =
                 (personSource) -> new CharacterTarget(personSource.getPersonId(),
                 personSource.getName(),
                 personSource.isMortal());
@@ -54,18 +54,18 @@ public class Main
         return new Transformer<>(personTransformer, persons).doTransform();
     }
 
-    private static void testLoad(List<CharacterTarget> transformedData)
+    private static void testLoad(final List<CharacterTarget> transformedData)
     {
         final var dbInfo = new DatabaseInformation("localhost", "targetdb", "test", "test", 25001);
         final var connection = new ConnectionHelper(DatabaseType.POSTGRESQL, dbInfo).createConnection();
 
-        StatementPreparerLoader<CharacterTarget> statementPreparerLoader =  (preparedStatement, data) -> {
+        final StatementPreparerLoader<CharacterTarget> statementPreparerLoader =  (preparedStatement, data) -> {
             preparedStatement.setInt(1, data.getPersonId());
             preparedStatement.setString(2, data.getName());
             preparedStatement.setBoolean(3, data.isMortal());
         };
 
-        var sql = "insert into person values (?, ?, ?)";
+        final var sql = "insert into person values (?, ?, ?)";
 
         new Loader<>(connection, statementPreparerLoader, transformedData, sql).doLoad();
     }

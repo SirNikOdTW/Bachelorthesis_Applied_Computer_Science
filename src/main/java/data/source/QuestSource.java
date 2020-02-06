@@ -8,12 +8,12 @@ import java.util.Objects;
 
 public class QuestSource implements SourceDataset
 {
-    private int questId;
-    private String name;
-    private Clob dialogue;
-    private int personId;
+    private final int questId;
+    private final String name;
+    private final Clob dialogue;
+    private final int personId;
 
-    public QuestSource(int questId, String name, Clob dialogue, int personId)
+    public QuestSource(final int questId, final String name, final Clob dialogue, final int personId)
     {
         this.questId = questId;
         this.name = name;
@@ -42,7 +42,7 @@ public class QuestSource implements SourceDataset
     }
 
     @Override
-    public boolean equals(Object o)
+    public boolean equals(final Object o)
     {
         if (this == o)
         {
@@ -52,7 +52,7 @@ public class QuestSource implements SourceDataset
         {
             return false;
         }
-        QuestSource that = (QuestSource) o;
+        final QuestSource that = (QuestSource) o;
         return questId == that.questId;
     }
 
@@ -69,7 +69,7 @@ public class QuestSource implements SourceDataset
         {
             return String.format("Quest { %d, %s, %s..., %d }", this.questId, this.name, this.dialogue.getSubString(1, 10), this.personId);
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             e.printStackTrace();
         }

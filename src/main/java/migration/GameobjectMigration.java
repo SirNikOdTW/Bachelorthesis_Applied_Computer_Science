@@ -1,9 +1,6 @@
 package migration;
 
-import com.mysql.cj.exceptions.NumberOutOfRange;
-import data.source.AbilitiesSource;
 import data.source.GameobjectSource;
-import data.target.AbilityTarget;
 import data.target.GameobjectTarget;
 import etl.Extractor;
 import etl.Loader;
@@ -19,7 +16,7 @@ import java.util.List;
 
 public class GameobjectMigration extends ETL<GameobjectSource, GameobjectTarget>
 {
-    public GameobjectMigration(Connection source, Connection target)
+    public GameobjectMigration(final Connection source, final Connection target)
     {
         super(source, target);
     }
@@ -27,8 +24,8 @@ public class GameobjectMigration extends ETL<GameobjectSource, GameobjectTarget>
     @Override
     protected List<GameobjectSource> extract()
     {
-        DataStorer<GameobjectSource> dataStorer = (resultSet) -> {
-            var extractedData = new ArrayList<GameobjectSource>();
+        final DataStorer<GameobjectSource> dataStorer = (resultSet) -> {
+            final var extractedData = new ArrayList<GameobjectSource>();
             while (resultSet.next())
             {
                 extractedData.add(new GameobjectSource(
@@ -40,16 +37,16 @@ public class GameobjectMigration extends ETL<GameobjectSource, GameobjectTarget>
             return extractedData;
         };
 
-        var sql = "select * from gameobject;";
-        StatementPreparerExtractor statementPreparer = (preparedStatement) -> {};
+        final var sql = "select * from gameobject;";
+        final StatementPreparerExtractor statementPreparer = (preparedStatement) -> {};
 
         return new Extractor<>(super.source, dataStorer, statementPreparer, sql).doExtract();
     }
 
     @Override
-    protected List<GameobjectTarget> transform(List<GameobjectSource> extractedData)
+    protected List<GameobjectTarget> transform(final List<GameobjectSource> extractedData)
     {
-        DataTransformer<GameobjectSource, GameobjectTarget> transformer = (dataset) -> new GameobjectTarget(
+        final DataTransformer<GameobjectSource, GameobjectTarget> transformer = (dataset) -> new GameobjectTarget(
                 dataset.getObjectId(),
                 dataset.getName(),
                 dataset.getDescription()
@@ -59,15 +56,15 @@ public class GameobjectMigration extends ETL<GameobjectSource, GameobjectTarget>
     }
 
     @Override
-    protected void load(List<GameobjectTarget> transformedData)
+    protected void load(final List<GameobjectTarget> transformedData)
     {
-        StatementPreparerLoader<GameobjectTarget> statementPreparerLoader =  (preparedStatement, data) -> {
+        final StatementPreparerLoader<GameobjectTarget> statementPreparerLoader =  (preparedStatement, data) -> {
             preparedStatement.setInt(1, data.getObjectId());
             preparedStatement.setString(2, data.getName());
             preparedStatement.setString(3, data.getDescription());
         };
 
-        var sql = "insert into gameobject values (?, ?, ?)";
+        final var sql = "insert into gameobject values (?, ?, ?)";
 
         new Loader<>(super.target, statementPreparerLoader, transformedData, sql).doLoad();
     }

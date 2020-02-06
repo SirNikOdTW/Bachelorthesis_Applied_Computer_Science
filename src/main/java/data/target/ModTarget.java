@@ -7,12 +7,12 @@ import java.time.LocalDate;
 
 public class ModTarget implements TargetDataset
 {
-    private int modId;
-    private String modName;
-    private LocalDate modInstallationDate;
-    private Blob modBinary;
+    private final int modId;
+    private final String modName;
+    private final LocalDate modInstallationDate;
+    private final Blob modBinary;
 
-    public ModTarget(int modId, String modName, LocalDate modInstallationDate, Blob modBinary)
+    public ModTarget(final int modId, final String modName, final LocalDate modInstallationDate, final Blob modBinary)
     {
         this.modId = modId;
         this.modName = modName;

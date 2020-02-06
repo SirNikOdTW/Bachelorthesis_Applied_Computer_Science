@@ -7,12 +7,12 @@ import java.time.LocalDate;
 
 public class ModSource implements SourceDataset
 {
-    private int modId;
-    private String name;
-    private LocalDate installationDate;
-    private Blob binary;
+    private final int modId;
+    private final String name;
+    private final LocalDate installationDate;
+    private final Blob binary;
 
-    public ModSource(int modId, String name, LocalDate installationDate, Blob binary)
+    public ModSource(final int modId, final String name, final LocalDate installationDate, final Blob binary)
     {
         this.modId = modId;
         this.name = name;

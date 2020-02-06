@@ -4,11 +4,11 @@ import data.TargetDataset;
 
 public class GameobjectTarget implements TargetDataset
 {
-    private int objectId;
-    private String name;
-    private String description;
+    private final int objectId;
+    private final String name;
+    private final String description;
 
-    public GameobjectTarget(int objectId, String name, String description)
+    public GameobjectTarget(final int objectId, final String name, final String description)
     {
         this.objectId = objectId;
         this.name = name;

@@ -1,9 +1,6 @@
 package migration;
 
-import data.SourceDataset;
-import data.source.AbilitiesSource;
 import data.source.PlayerAbilitiesSource;
-import data.target.AbilityTarget;
 import data.target.PlayerAbilitiesTarget;
 import etl.Extractor;
 import etl.Loader;
@@ -19,7 +16,7 @@ import java.util.List;
 
 public class PlayerAbilitiesMigration extends ETL<PlayerAbilitiesSource, PlayerAbilitiesTarget>
 {
-    public PlayerAbilitiesMigration(Connection source, Connection target)
+    public PlayerAbilitiesMigration(final Connection source, final Connection target)
     {
         super(source, target);
     }
@@ -27,8 +24,8 @@ public class PlayerAbilitiesMigration extends ETL<PlayerAbilitiesSource, PlayerA
     @Override
     protected List<PlayerAbilitiesSource> extract()
     {
-        DataStorer<PlayerAbilitiesSource> dataStorer = (resultSet) -> {
-            var extractedData = new ArrayList<PlayerAbilitiesSource>();
+        final DataStorer<PlayerAbilitiesSource> dataStorer = (resultSet) -> {
+            final var extractedData = new ArrayList<PlayerAbilitiesSource>();
             while (resultSet.next())
             {
                 extractedData.add(new PlayerAbilitiesSource(
@@ -39,33 +36,31 @@ public class PlayerAbilitiesMigration extends ETL<PlayerAbilitiesSource, PlayerA
             return extractedData;
         };
 
-        var sql = "select * from player p join ability a on p.playerId = ?;";
-        StatementPreparerExtractor statementPreparer = (preparedStatement) -> {
-            preparedStatement.setInt(1, 0);
-        };
+        final var sql = "select * from player p join ability a on p.playerId = ?;";
+        final StatementPreparerExtractor statementPreparer = (preparedStatement) -> preparedStatement.setInt(1, 0);
 
         return new Extractor<>(super.source, dataStorer, statementPreparer, sql).doExtract();
     }
 
     @Override
-    protected List<PlayerAbilitiesTarget> transform(List<PlayerAbilitiesSource> extractedData)
+    protected List<PlayerAbilitiesTarget> transform(final List<PlayerAbilitiesSource> extractedData)
     {
-        DataTransformer<PlayerAbilitiesSource, PlayerAbilitiesTarget> transformer =
+        final DataTransformer<PlayerAbilitiesSource, PlayerAbilitiesTarget> transformer =
                 (dataset) -> new PlayerAbilitiesTarget(dataset.getPlayerId(), dataset.getAbilityId());
 
         return new Transformer<>(transformer, extractedData).doTransform();
     }
 
     @Override
-    protected void load(List<PlayerAbilitiesTarget> transformedData)
+    protected void load(final List<PlayerAbilitiesTarget> transformedData)
     {
 
-        StatementPreparerLoader<PlayerAbilitiesTarget> statementPreparerLoader =  (preparedStatement, data) -> {
+        final StatementPreparerLoader<PlayerAbilitiesTarget> statementPreparerLoader =  (preparedStatement, data) -> {
             preparedStatement.setInt(1, data.getPlayerId());
             preparedStatement.setInt(2, data.getAbilityId());
         };
 
-        var sql = "insert into playerAbilities values (?, ?)";
+        final var sql = "insert into playerAbilities values (?, ?)";
 
         new Loader<>(super.target, statementPreparerLoader, transformedData, sql).doLoad();
     }
