@@ -50,6 +50,7 @@ public class ThesisMigration
         this.migrations.add(new CharacterMigration(this.mariadb, this.postgresql));
         this.migrations.add(new GameobjectMigration(this.mariadb, this.postgresql));
         this.migrations.add(new QuestMigration(this.mariadb, this.postgresql));
+        this.migrations.add(new ModMigration(this.mariadb, this.postgresql));
     }
 
     public void executeMigrations()
