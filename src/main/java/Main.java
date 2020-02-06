@@ -1,17 +1,21 @@
 import data.source.PersonSource;
 import data.target.CharacterTarget;
 import etl.*;
+import migration.ThesisMigration;
+import org.apache.log4j.Logger;
 import utils.*;
 
 import java.util.*;
 
 public class Main
 {
+    private static Logger log = Logger.getLogger(Main.class.getName());
+
     public static void main(final String[] args)
     {
-        var p = testExtract();
-        var pt = testTransform(p);
-        testLoad(pt);
+        log.info("------------- Starting Migration -------------");
+        new ThesisMigration().executeMigrations();
+        log.info("------------- Migration Finished -------------");
     }
 
     private static List<PersonSource> testExtract()

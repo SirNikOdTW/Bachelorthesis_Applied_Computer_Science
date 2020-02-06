@@ -1,12 +1,16 @@
 package utils;
 
+import migration.ThesisMigration;
+import org.apache.log4j.Logger;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.*;
-import java.util.Properties;
 
 public class ConnectionHelper
 {
+    private static Logger log = Logger.getLogger(ConnectionHelper.class.getName());
+
     private final DatabaseType databaseType;
     private final String user;
     private final String password;
@@ -46,20 +50,23 @@ public class ConnectionHelper
             e.printStackTrace();
         }
 
-        Connection c = null;
+        Connection connection = null;
 
         try
         {
-            c = DriverManager.getConnection(this.uri.toString(), this.user, this.password);
+            log.info(String.format("Trying to connect to %s", this.uri.toString()));
+            connection = DriverManager.getConnection(this.uri.toString(), this.user, this.password);
         }
         catch (final SQLException e)
         {
-            System.out.println("SQLException: " + e.getMessage());
-            System.out.println("SQLState: " + e.getSQLState());
-            System.out.println("VendorError: " + e.getErrorCode());
+            log.error(String.format("""
+                    SQLException: %s;
+                    SQLState: %s;
+                    VendorError:%s""",
+                    e.getMessage(), e.getSQLState(), e.getErrorCode()));
             e.printStackTrace();
         }
 
-        return c;
+        return connection;
     }
 }
