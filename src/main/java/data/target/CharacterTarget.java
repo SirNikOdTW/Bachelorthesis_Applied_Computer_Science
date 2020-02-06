@@ -1,14 +1,15 @@
 package data.target;
 
-import data.Dataset;
+import data.SourceDataset;
+import data.TargetDataset;
 
-public class PersonTarget implements Dataset
+public class CharacterTarget implements TargetDataset
 {
     private int personId;
     private String name;
     private boolean mortal;
 
-    public PersonTarget(int personId, String name, boolean mortal)
+    public CharacterTarget(int personId, String name, boolean mortal)
     {
         this.personId = personId;
         this.name = name;

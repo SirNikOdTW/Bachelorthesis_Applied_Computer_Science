@@ -1,8 +1,8 @@
 package data.source;
 
-import data.Dataset;
+import data.SourceDataset;
 
-public class PersonSource implements Dataset
+public class PersonSource implements SourceDataset
 {
     private int personId;
     private String name;

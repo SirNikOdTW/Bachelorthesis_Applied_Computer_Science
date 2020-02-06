@@ -1,10 +1,9 @@
 package utils;
 
-import data.Dataset;
+import data.SourceDataset;
+import data.TargetDataset;
 
-import java.util.List;
-
-public interface DataTransformer<T extends Dataset, E extends Dataset>
+public interface DataTransformer<T extends SourceDataset, E extends TargetDataset>
 {
     E transform(T dataset);
 }

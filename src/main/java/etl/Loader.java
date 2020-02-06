@@ -1,24 +1,25 @@
 package etl;
 
-import data.Dataset;
-import utils.StatementPreparer;
+import data.SourceDataset;
+import data.TargetDataset;
+import utils.StatementPreparerLoader;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-public class Loader<T extends Dataset>
+public class Loader<T extends TargetDataset>
 {
     private Connection targetDatabase;
-    private StatementPreparer<T> statementPreparer;
+    private StatementPreparerLoader<T> statementPreparerLoader;
     private List<T> transformedData;
     private String sql;
 
-    public Loader(Connection targetDatabase, StatementPreparer<T> statementPreparer, List<T> transformedData,
+    public Loader(Connection targetDatabase, StatementPreparerLoader<T> statementPreparerLoader, List<T> transformedData,
                   String sql)
     {
         this.targetDatabase = targetDatabase;
-        this.statementPreparer = statementPreparer;
+        this.statementPreparerLoader = statementPreparerLoader;
         this.transformedData = transformedData;
         this.sql = sql;
     }
@@ -30,7 +31,7 @@ public class Loader<T extends Dataset>
             for (T transformedDatum : this.transformedData)
             {
                 var preparedStatement = this.targetDatabase.prepareStatement(this.sql);
-                this.statementPreparer.doPrepare(preparedStatement, transformedDatum);
+                this.statementPreparerLoader.doPrepare(preparedStatement, transformedDatum);
                 preparedStatement.executeUpdate();
             }
 

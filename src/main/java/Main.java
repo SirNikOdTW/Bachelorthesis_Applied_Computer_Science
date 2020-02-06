@@ -1,68 +1,61 @@
 import data.source.PersonSource;
-import data.target.PersonTarget;
-import etl.Extractor;
-import etl.Loader;
-import etl.Transformer;
+import data.target.CharacterTarget;
+import etl.*;
 import utils.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.time.Period;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Main
 {
-    public static void main(final String[] args) throws SQLException
+    public static void main(final String[] args)
     {
-//        mysqlDb();
-//        postgresqlDb();
-//        mariaDb();
-
         var p = testExtract();
         var pt = testTransform(p);
         testLoad(pt);
     }
 
-    private static List<PersonSource> testExtract() throws SQLException
+    private static List<PersonSource> testExtract()
     {
-        final var dbInfo = new DatabaseInformation("localhost", "sourcedb1", "test", "test", 5435);
+        final var dbInfo = new DatabaseInformation("localhost", "sourcedb1", "test", "test", 25003);
         final var connection = new ConnectionHelper(DatabaseType.MARIADB, dbInfo).createConnection();
 
         DataStorer<PersonSource> personSourceDataStorer = (rs) -> {
             var persons = new ArrayList<PersonSource>();
             while (rs.next())
             {
-                persons.add(new PersonSource(rs.getInt("personId"),
+                persons.add(new PersonSource(
+                        rs.getInt("personId"),
                         rs.getString("name"),
-                        rs.getBoolean("mortal")));
+                        rs.getBoolean("mortal"))
+                );
             }
             return persons;
         };
 
+        StatementPreparerExtractor statementPreparer = (preparedStatement) -> {
+        };
+
         var sql = "select * from person;";
 
-        return new Extractor<>(connection, personSourceDataStorer, sql).doExtract();
+        return new Extractor<>(connection, personSourceDataStorer, statementPreparer, sql).doExtract();
     }
 
-    private static List<PersonTarget> testTransform(List<PersonSource> persons)
+    private static List<CharacterTarget> testTransform(List<PersonSource> persons)
     {
-        DataTransformer<PersonSource, PersonTarget> personTransformer = (personSource) -> {
-            return new PersonTarget(personSource.getPersonId(),
-                    personSource.getName(),
-                    personSource.isMortal());
-        };
+        DataTransformer<PersonSource, CharacterTarget> personTransformer =
+                (personSource) -> new CharacterTarget(personSource.getPersonId(),
+                personSource.getName(),
+                personSource.isMortal());
 
         return new Transformer<>(personTransformer, persons).doTransform();
     }
 
-    private static void testLoad(List<PersonTarget> transformedData)
+    private static void testLoad(List<CharacterTarget> transformedData)
     {
-        final var dbInfo = new DatabaseInformation("localhost", "targetdb", "test", "test", 5432);
+        final var dbInfo = new DatabaseInformation("localhost", "targetdb", "test", "test", 25001);
         final var connection = new ConnectionHelper(DatabaseType.POSTGRESQL, dbInfo).createConnection();
 
-        StatementPreparer<PersonTarget> statementPreparer = (preparedStatement, data) -> {
+        StatementPreparerLoader<CharacterTarget> statementPreparerLoader =  (preparedStatement, data) -> {
             preparedStatement.setInt(1, data.getPersonId());
             preparedStatement.setString(2, data.getName());
             preparedStatement.setBoolean(3, data.isMortal());
@@ -70,6 +63,6 @@ public class Main
 
         var sql = "insert into person values (?, ?, ?)";
 
-        new Loader<>(connection, statementPreparer, transformedData, sql).doLoad();
+        new Loader<>(connection, statementPreparerLoader, transformedData, sql).doLoad();
     }
 }
