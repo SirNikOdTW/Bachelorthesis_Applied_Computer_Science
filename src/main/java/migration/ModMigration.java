@@ -5,10 +5,7 @@ import data.target.ModTarget;
 import etl.Extractor;
 import etl.Loader;
 import etl.Transformer;
-import utils.DataStorer;
-import utils.DataTransformer;
-import utils.StatementPreparerExtractor;
-import utils.StatementPreparerLoader;
+import utils.*;
 
 import java.sql.Connection;
 import java.sql.Date;

@@ -8,6 +8,11 @@ public class InventoryTarget implements TargetDataset
     private final int objectId;
     private final boolean stolen;
 
+    public InventoryTarget(int playerId, int objectId)
+    {
+        this(playerId, objectId, false);
+    }
+
     public InventoryTarget(final int playerId, final int objectId, final boolean stolen)
     {
         this.playerId = playerId;

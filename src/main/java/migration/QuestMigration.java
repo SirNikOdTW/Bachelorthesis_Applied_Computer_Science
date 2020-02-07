@@ -1,14 +1,12 @@
 package migration;
 
+import com.mysql.cj.jdbc.Clob;
 import data.source.QuestSource;
 import data.target.QuestTarget;
 import etl.Extractor;
 import etl.Loader;
 import etl.Transformer;
-import utils.DataStorer;
-import utils.DataTransformer;
-import utils.StatementPreparerExtractor;
-import utils.StatementPreparerLoader;
+import utils.*;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -33,7 +31,7 @@ public class QuestMigration extends ETL<QuestSource, QuestTarget>
                 extractedData.add(new QuestSource(
                         resultSet.getInt("questId"),
                         resultSet.getString("name"),
-                        resultSet.getClob("dialogue"),
+                        resultSet.getString("dialogue"),
                         resultSet.getInt("personId")));
             }
             return extractedData;
@@ -83,7 +81,7 @@ public class QuestMigration extends ETL<QuestSource, QuestTarget>
             preparedStatement.setInt(1, data.getQuestId());
             preparedStatement.setString(2, data.getName());
             preparedStatement.setString(3, data.getInvolvedCharacters());
-            preparedStatement.setClob(4, data.getDialogue());
+            preparedStatement.setString(4, data.getDialogue());
         };
 
         final var sql = "insert into quest values (?, ?, ?, ?)";

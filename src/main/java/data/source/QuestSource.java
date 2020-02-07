@@ -2,7 +2,6 @@ package data.source;
 
 import data.SourceDataset;
 
-import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.Objects;
 
@@ -10,10 +9,10 @@ public class QuestSource implements SourceDataset
 {
     private final int questId;
     private final String name;
-    private final Clob dialogue;
+    private final String dialogue;
     private final int personId;
 
-    public QuestSource(final int questId, final String name, final Clob dialogue, final int personId)
+    public QuestSource(final int questId, final String name, final String dialogue, final int personId)
     {
         this.questId = questId;
         this.name = name;
@@ -31,7 +30,7 @@ public class QuestSource implements SourceDataset
         return name;
     }
 
-    public Clob getDialogue()
+    public String getDialogue()
     {
         return dialogue;
     }
@@ -65,15 +64,6 @@ public class QuestSource implements SourceDataset
     @Override
     public String toString()
     {
-        try
-        {
-            return String.format("Quest { %d, %s, %s..., %d }", this.questId, this.name, this.dialogue.getSubString(1, 10), this.personId);
-        }
-        catch (final SQLException e)
-        {
-            e.printStackTrace();
-        }
-
-        return null;
+        return String.format("Quest { %d, %s, %s..., %d }", this.questId, this.name, this.dialogue.substring(0, 10), this.personId);
     }
 }

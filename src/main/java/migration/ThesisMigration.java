@@ -4,13 +4,13 @@ import org.apache.log4j.Logger;
 import utils.ConnectionHelper;
 import utils.DatabaseInformation;
 import utils.DatabaseType;
+import utils.ETL;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("ALL")
 public class ThesisMigration
 {
     private static final Logger log = Logger.getLogger(ThesisMigration.class.getName());
@@ -52,6 +52,10 @@ public class ThesisMigration
         this.migrations.add(new GameobjectMigration(this.mariadb, this.postgresql));
         this.migrations.add(new QuestMigration(this.mariadb, this.postgresql));
         this.migrations.add(new ModMigration(this.mariadb, this.postgresql));
+        this.migrations.add(new CharacterInventoryMigration(this.mariadb, this.postgresql));
+        this.migrations.add(new RelationshipMigration(this.mysql, this.postgresql));
+        this.migrations.add(new ActiveQuestsMigration(this.mysql, this.postgresql));
+        this.migrations.add(new InventoryMigration(this.mysql, this.postgresql));
     }
 
     public void executeMigrations()

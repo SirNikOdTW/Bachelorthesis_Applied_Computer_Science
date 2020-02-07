@@ -3,6 +3,7 @@ package migration;
 import data.SourceDataset;
 import data.target.PlayerTarget;
 import etl.Loader;
+import utils.ETL;
 import utils.StatementPreparerLoader;
 
 import java.sql.Connection;
@@ -13,12 +14,6 @@ public class PlayerMigration extends ETL<SourceDataset, PlayerTarget>
     public PlayerMigration(final Connection source, final Connection target)
     {
         super(source, target);
-    }
-
-    @Override
-    public void migrate()
-    {
-        this.createPlayer();
     }
 
     @Override
@@ -36,19 +31,15 @@ public class PlayerMigration extends ETL<SourceDataset, PlayerTarget>
     @Override
     protected void load(final List<PlayerTarget> transformedData)
     {
-    }
-
-    private void createPlayer()
-    {
-        final var sql = "insert into player values (?, ?)";
-
         final StatementPreparerLoader<PlayerTarget> statementPreparerLoader =  (preparedStatement, data) -> {
             preparedStatement.setInt(1, data.getPlayerId());
             preparedStatement.setString(2, data.getPlayerName());
         };
 
-        final var transformedData = List.of(new PlayerTarget(0, "Dummy Name"));
+        final var createdData = List.of(new PlayerTarget(0, "Dummy Name"));
 
-        new Loader<>(this.target, statementPreparerLoader, transformedData, sql).doLoad();
+        final var sql = "insert into player values (?, ?)";
+
+        new Loader<>(this.target, statementPreparerLoader, createdData, sql).doLoad();
     }
 }

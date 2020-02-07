@@ -6,9 +6,9 @@ public class RelationshipTarget implements TargetDataset
 {
     private final int playerId;
     private final int personId;
-    private final int relationshipLevel;
+    private final float relationshipLevel;
 
-    public RelationshipTarget(final int playerId, final int personId, final int relationshipLevel)
+    public RelationshipTarget(final int playerId, final int personId, final float relationshipLevel)
     {
         this.playerId = playerId;
         this.personId = personId;
@@ -25,7 +25,7 @@ public class RelationshipTarget implements TargetDataset
         return personId;
     }
 
-    public int getRelationshipLevel()
+    public float getRelationshipLevel()
     {
         return relationshipLevel;
     }
@@ -33,7 +33,7 @@ public class RelationshipTarget implements TargetDataset
     @Override
     public String toString()
     {
-        return String.format("Relationship [ %d, %d, %d ]", this.playerId, this.personId, this.relationshipLevel);
+        return String.format("Relationship [ %d, %d, %f ]", this.playerId, this.personId, this.relationshipLevel);
     }
 
 }
