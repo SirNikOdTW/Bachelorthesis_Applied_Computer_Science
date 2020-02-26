@@ -2,6 +2,7 @@ package migration;
 
 import data.source.PlayerAbilitiesSource;
 import data.target.PlayerAbilitiesTarget;
+import etl.ETL;
 import etl.Extractor;
 import etl.Loader;
 import etl.Transformer;
@@ -51,7 +52,6 @@ public class PlayerAbilitiesMigration extends ETL<PlayerAbilitiesSource, PlayerA
     @Override
     protected void load(final List<PlayerAbilitiesTarget> transformedData)
     {
-
         final StatementPreparerLoader<PlayerAbilitiesTarget> statementPreparerLoader =  (preparedStatement, data) -> {
             preparedStatement.setInt(1, data.getPlayerId());
             preparedStatement.setInt(2, data.getAbilityId());

@@ -2,6 +2,7 @@ package migration;
 
 import data.source.PersonInventorySource;
 import data.target.CharacterInventoryTarget;
+import etl.ETL;
 import etl.Extractor;
 import etl.Loader;
 import etl.Transformer;

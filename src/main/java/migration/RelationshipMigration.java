@@ -3,6 +3,7 @@ package migration;
 import com.mysql.cj.exceptions.NumberOutOfRange;
 import data.source.RelationshipsSource;
 import data.target.RelationshipTarget;
+import etl.ETL;
 import etl.Extractor;
 import etl.Loader;
 import etl.Transformer;

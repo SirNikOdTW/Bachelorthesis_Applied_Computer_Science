@@ -1,10 +1,9 @@
-package migration;
-
+import migration.*;
 import org.apache.log4j.Logger;
 import utils.ConnectionHelper;
 import utils.DatabaseInformation;
 import utils.DatabaseType;
-import utils.ETL;
+import etl.ETL;
 
 import java.sql.Connection;
 import java.sql.SQLException;
