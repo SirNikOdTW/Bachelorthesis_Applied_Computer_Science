@@ -1,0 +1,12 @@
+insert into activeQuests values (56, 90);
+insert into activeQuests values (15, 34);
+insert into activeQuests (questId) values (5);
+insert into activeQuests (questId) values (62);
+insert into activeQuests (questId) values (43);
+insert into activeQuests (questId) values (10);
+insert into activeQuests (questId) values (88);
+insert into activeQuests (questId) values (12);
+insert into activeQuests (questId) values (33);
+insert into activeQuests (questId) values (53);
+insert into activeQuests values (1, 32);
+insert into activeQuests (questId) values (18);

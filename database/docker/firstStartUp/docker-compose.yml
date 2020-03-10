@@ -1,0 +1,43 @@
+version: '3.1'
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres_db
+    restart: always
+    ports:
+      - 25001:5432
+    environment:
+      POSTGRES_USER:     test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB:       targetdb
+    volumes:
+      - ../../sql/postgresql:/docker-entrypoint-initdb.d
+
+  mysql:
+    image: mysqlfirst
+    container_name: mysql_db
+    restart: always
+    ports:
+      - 25002:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+      MYSQL_DATABASE: sourcedb2
+    volumes:
+      - ../../sql/mysql:/docker-entrypoint-initdb.d
+
+  maria:
+    image: mariadbfirst
+    container_name: maria_db
+    restart: always
+    ports:
+      - 25003:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+      MYSQL_DATABASE: sourcedb1
+    volumes:
+      - ../../sql/maria:/docker-entrypoint-initdb.d

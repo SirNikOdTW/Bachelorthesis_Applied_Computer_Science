@@ -1,0 +1,32 @@
+version: '3.1'
+
+services:
+  # targetdb
+  postgres:
+    image: thesis/postgresql:1.0
+    container_name: postgres_db
+    restart: always
+    ports:
+      - 25001:5432
+    environment:
+      POSTGRES_USER:     test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB:       targetdb
+    volumes:
+      - ../sql/postgresql:/docker-entrypoint-initdb.d
+
+  # sourcedb2
+  mysql:
+    image: thesis/mysql:1.0
+    container_name: mysql_db
+    restart: always
+    ports:
+      - 25002:3306
+
+  # sourcedb1
+  maria:
+    image: thesis/mariadb:1.0
+    container_name: maria_db
+    restart: always
+    ports:
+      - 25003:3306
